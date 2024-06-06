@@ -7,7 +7,7 @@ public class GridControl : MonoBehaviour
     public GameObject GridCube;
     public GameObject[,] grid = new GameObject[6, 6];
 
-    public float moveInterval = 1.0f;
+    public float moveInterval = 2.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -102,17 +102,17 @@ public class GridControl : MonoBehaviour
         }
         else{
             // Store the upmost element temporarily
-            GameObject temp = grid[colIndex, 0];
+            GameObject temp = grid[0 , colIndex];
             // Shift all elements in the row to the right
             for (int i = 0; i < 5; i++)
             {
-                grid[colIndex, i] = grid[colIndex, i + 1];
+                grid[i , colIndex] = grid[i + 1 , colIndex];
                 // Update the position of the moved element
-                grid[colIndex, i].transform.position = new Vector3(colIndex * 1.5f, 0, i * 1.5f);
+                grid[i , colIndex].transform.position = new Vector3(i * 1.5f , 0 , colIndex * 1.5f);
             }
             // Move the temporarily stored element to the leftmost position
-            grid[colIndex, 5] = temp;
-            grid[colIndex, 5].transform.position = new Vector3(colIndex * 1.5f, 0, 5 * 1.5f);            
+            grid[5 , colIndex] = temp;
+            grid[5 , colIndex].transform.position = new Vector3(5 * 1.5f , 0 , colIndex * 1.5f);            
         }
     }
 }
