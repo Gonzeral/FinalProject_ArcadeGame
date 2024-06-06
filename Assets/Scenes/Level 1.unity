@@ -341,6 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bfbfa0937aa34ba768a11001a015c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ufoHeight: 1.5
 --- !u!136 &246715725
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -459,6 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridCube: {fileID: 2125551131262776401, guid: f99ad7a5e476cd94496a4be7582bc189, type: 3}
+  moveInterval: 1
 --- !u!4 &1182610836
 Transform:
   m_ObjectHideFlags: 0
