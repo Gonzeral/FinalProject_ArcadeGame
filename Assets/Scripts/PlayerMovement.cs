@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerMovement : MonoBehaviour
 {
 
 public float ufoHeight = 1.5f;
 private GridControl gridControl; // Reference to GridControl
 private Vector2Int currentPosition = new Vector2Int(3 , 3); // Sets current position to center of grid
+private DestroyPlanet matChanger; // Reference DestroyPlanet script
 
 void Start()
 {
     gridControl = FindObjectOfType<GridControl>();
-
     SetInitialPosition();
+    matChanger = FindObjectOfType<DestroyPlanet>();
 }
 
 
@@ -47,8 +49,9 @@ void JumpTo(int x, int y)
 
         //
         // Create separate script for handling coloring later, for now:
+        matChanger.ChangePlanetMaterial(gridControl.grid[x, y]);
         //
-        gridControl.grid[x, y].GetComponent<Renderer>().material.color = Color.red; // Change to desired color
+        //gridControl.grid[x, y].GetComponent<Renderer>().material.color = Color.red; // Change to desired color
     }
     else
     {
