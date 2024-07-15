@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1572257, g: 0.12754643, b: 0.27461177, a: 1}
+  m_IndirectSpecularColor: {r: 0.016842056, g: 0.017359179, b: 0.017595802, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -208,8 +208,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7053836}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1774655, y: 0.81699634, z: -0.33183524, w: -0.4369307}
-  m_LocalPosition: {x: 11.055053, y: 6.69936, z: 9.736578}
+  m_LocalRotation: {x: -0.1445, y: 0.8539269, z: -0.32435817, w: -0.38042134}
+  m_LocalPosition: {x: 9.777146, y: 5.4028873, z: 9.955061}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -319,8 +319,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1182610836}
   - component: {fileID: 1182610835}
+  - component: {fileID: 1182610838}
   m_Layer: 0
-  m_Name: SceneHandler
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -339,7 +340,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridCube: {fileID: 2125551131262776401, guid: f99ad7a5e476cd94496a4be7582bc189, type: 3}
-  moveInterval: 1
+  moveInterval: 2
+  animationDuration: 0.5
+  disappearInterval: 5
+  invisibilityDuration: 5
+  warningDuration: 3
+  warningMaterial: {fileID: 2100000, guid: 47420001937b18545ac92fef011ed938, type: 2}
+  undestroyedPlanetMat: {fileID: 2100000, guid: ddb0556055b89a04b94d593283b8daf5, type: 2}
 --- !u!4 &1182610836
 Transform:
   m_ObjectHideFlags: 0
@@ -355,6 +362,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1182610838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182610834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82d39c554b1c5034886102334c3ca2ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMaterial: {fileID: 2100000, guid: fe3d63300774dd940877f82c77f15936, type: 2}
 --- !u!1 &1527017788 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f4b90f47f54682043a6fb93158d7e547, type: 3}
