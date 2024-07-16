@@ -51,6 +51,7 @@ public class Scoring : MonoBehaviour
         UpdateLives();
         if (lives <= 0)
         {
+            CheckHighScore();
             gameOverManager.GameOver();
         }
     }
@@ -65,6 +66,40 @@ public class Scoring : MonoBehaviour
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    private void CheckHighScore()
+    {
+        List<int> highScores = GetHighScores();
+        if (score > highScores[highScores.Count - 1])
+        {
+            highScores.Add(score);
+            highScores.Sort((a, b) => b.CompareTo(a));
+            if (highScores.Count > 5)
+            {
+                highScores.Remove(highScores.Count - 1);
+            }
+            SaveHighScores(highScores);
+        }
+    }
+
+    private List<int> GetHighScores()
+    {
+        List<int> highScores = new List<int>();
+        for (int i = 0; i<5; i++)
+        {
+            highScores.Add(PlayerPrefs.GetInt("Highscore" + i,0));
+        }
+        return highScores;
+    }
+
+    private void SaveHighScores(List<int> highScores)
+    {
+        for(int i = 0; i<highScores.Count; i++)
+        {
+            PlayerPrefs.SetInt("Highscore" + i, highScores[i]);
+        }
+        PlayerPrefs.Save();
     }
 
 }
