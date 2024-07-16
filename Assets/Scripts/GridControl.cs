@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridControl : MonoBehaviour
 {
     public GameObject GridCube;
+    public GameObject WarningPrefab;
     public GameObject[,] grid = new GameObject[6, 6]; // Grid structure = 6x6 grid
 
     // Following variables in seconds
@@ -15,7 +16,8 @@ public class GridControl : MonoBehaviour
     public float warningDuration = 3f; // Duration of the warning before cube disappears
     public Material warningMaterial; // Material to warn player about disappearing cube
     public Material undestroyedPlanetMat; // Material of undestroyed planets
-
+    private GameObject currentWarning; // Used for the arrow object instantiated for the row / column movement warning
+    
     void Start()
     {
         for (int x = 0; x < 6; x++)
@@ -40,24 +42,72 @@ public class GridControl : MonoBehaviour
 
     void MoveRandomRowOrColumn()
     {
+        // Clean up warning signal before starting new row / col movement
+        if (currentWarning != null)
+        {
+            Destroy(currentWarning);
+        }
+
         // 50 % chance to move either a row or a column with a random integer
         bool moveRow = Random.value > 0.5f;
+        bool upOrDown = Random.value > 0.5f;
         int index = Random.Range(0, 6);
-        // Start coroutine for smooth animation of movement
-        if (moveRow)
+
+        Vector3 warningPosition;
+        Quaternion warningRotation;
+
+        if(moveRow)
         {
-            StartCoroutine(MoveRow(index));
+            if (upOrDown)
+            {
+                warningPosition = new Vector3(index * 1.5f, 0.5f, -1.5f);
+                warningRotation = Quaternion.Euler(0, 0, 0);
+            }
+            else
+            {
+                warningPosition = new Vector3(index * 1.5f, 0.5f, 6 * 1.5f);
+                warningRotation = Quaternion.Euler(0, 180, 0);
+            }
         }
         else
         {
-            StartCoroutine(MoveColumn(index));
+            if (upOrDown)
+            {
+                warningPosition = new Vector3(-1.5f, 0.5f, index * 1.5f);
+                warningRotation = Quaternion.Euler(0, 90, 0);
+            }
+            else
+            {
+                warningPosition = new Vector3(6 * 1.5f, 0.5f, index * 1.5f);
+                warningRotation = Quaternion.Euler(0, -90, 0);
+            }
+        }
+
+        currentWarning = Instantiate(WarningPrefab, warningPosition, warningRotation);
+        StartCoroutine(WarnGridMovement(moveRow, index, upOrDown));
+
+        IEnumerator WarnGridMovement(bool moveRow, int index, bool upOrDown)
+        {
+            yield return new WaitForSeconds(warningDuration);
+
+            if(currentWarning != null)
+            {
+                Destroy(currentWarning);
+            }
+
+            if (moveRow)
+            {
+                StartCoroutine(MoveRow(index, upOrDown));
+            }
+            else
+            {
+                StartCoroutine(MoveColumn(index, upOrDown));
+            }
         }
     }
 
-    IEnumerator MoveRow(int rowIndex)
+    IEnumerator MoveRow(int rowIndex, bool upOrDown)
     {
-        // 50 % chance to move row up or down
-        bool upOrDown = Random.value > 0.5f;
         if (upOrDown)
         {
             // Save reference of cube that leaves grid
@@ -96,10 +146,8 @@ public class GridControl : MonoBehaviour
         }
     }
 
-    IEnumerator MoveColumn(int colIndex)
+    IEnumerator MoveColumn(int colIndex, bool upOrDown)
     {
-        // 50 % chance to move column up or down
-        bool upOrDown = Random.value > 0.5f;
         if (upOrDown)
         {
             // Save reference of cube that leaves grid
@@ -176,8 +224,9 @@ public class GridControl : MonoBehaviour
         cube.SetActive(false);
         // Wait before cube is reactivated and make planet undestroyed again
         yield return new WaitForSeconds(invisibilityDuration); 
-        cube.SetActive(true);
         renderer.material = undestroyedPlanetMat;
+        cube.SetActive(true);
+        
     }
 
 }
