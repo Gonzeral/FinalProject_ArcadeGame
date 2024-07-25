@@ -1197,6 +1197,13 @@ MonoBehaviour:
   warningDuration: 2
   warningMaterial: {fileID: 2100000, guid: 47420001937b18545ac92fef011ed938, type: 2}
   undestroyedPlanetMat: {fileID: 2100000, guid: ddb0556055b89a04b94d593283b8daf5, type: 2}
+  difficultyIncreaseInterval: 5
+  moveIntervalDecrement: 0.1
+  disappearIntervalDecrement: 0.2
+  warningDurationDecrement: 0.1
+  minMoveInterval: 1
+  minDisappearInterval: 1.5
+  minWarningDuration: 0.5
 --- !u!4 &1182610836
 Transform:
   m_ObjectHideFlags: 0
@@ -1245,6 +1252,9 @@ MonoBehaviour:
   - {fileID: 2089000045}
   penalty: 10
   penaltyTimer: 5
+  ufoObject: {fileID: 1527017788}
+  immunityDuration: 3
+  immunityColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &1182610840
 MonoBehaviour:
   m_ObjectHideFlags: 0

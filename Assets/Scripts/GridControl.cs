@@ -17,9 +17,28 @@ public class GridControl : MonoBehaviour
     public Material warningMaterial; // Material to warn player about disappearing cube
     public Material undestroyedPlanetMat; // Material of undestroyed planets
     private GameObject currentWarning; // Used for the arrow object instantiated for the row / column movement warning
-    
+
+
+    // Difficulty scaling parameters
+    public float difficultyIncreaseInterval = 5f; // Interval in seconds to increase difficulty
+    public float moveIntervalDecrement = 0.1f; // Amount to decrease move interval
+    public float disappearIntervalDecrement = 0.2f; // Amount to decrease disappear interval
+    public float warningDurationDecrement = 0.1f; // Amount to decrease warning duration
+    public float minMoveInterval = 1.0f; // Minimum interval for row/column movements
+    public float minDisappearInterval = 1.5f; // Minimum interval for disappearing cubes
+    public float minWarningDuration = 0.5f; // Minimum duration for warnings
+
+    private float currentMoveInterval;
+    private float currentDisappearInterval;
+    private float currentWarningDuration;
+
     void Start()
     {
+        currentMoveInterval = moveInterval;
+        currentDisappearInterval = disappearInterval;
+        currentWarningDuration = warningDuration;
+
+
         for (int x = 0; x < 6; x++)
         {
             for (int y = 0; y < 6; y++)
@@ -31,8 +50,10 @@ public class GridControl : MonoBehaviour
         }
 
         // Call methods in fixed intervals / Methods below
-        InvokeRepeating("MoveRandomRowOrColumn", moveInterval, moveInterval);
-        InvokeRepeating("MakeCubeDisappear", disappearInterval, disappearInterval);
+        InvokeRepeating("MoveRandomRowOrColumn", currentMoveInterval, currentMoveInterval);
+        InvokeRepeating("MakeCubeDisappear", currentDisappearInterval, currentDisappearInterval);
+
+        InvokeRepeating("IncreaseDifficulty", difficultyIncreaseInterval, difficultyIncreaseInterval);
     }
 
     void Update()
@@ -88,7 +109,7 @@ public class GridControl : MonoBehaviour
 
         IEnumerator WarnGridMovement(bool moveRow, int index, bool upOrDown)
         {
-            yield return new WaitForSeconds(warningDuration);
+            yield return new WaitForSeconds(currentWarningDuration);
 
             if(currentWarning != null)
             {
@@ -220,7 +241,7 @@ public class GridControl : MonoBehaviour
         Renderer renderer = cube.GetComponent<Renderer>();
         renderer.material = warningMaterial;
         // Wait for the warning to be over and then deactivate cube 
-        yield return new WaitForSeconds(warningDuration);
+        yield return new WaitForSeconds(currentWarningDuration);
         cube.SetActive(false);
 
         // Change surrounding cubes to undestroyed material
@@ -254,6 +275,36 @@ public class GridControl : MonoBehaviour
         }
     }
 
+        void IncreaseDifficulty()
+    {
+        // Decrease the move interval but ensure it doesn't go below the minimum
+        if (currentMoveInterval > minMoveInterval)
+        {
+            currentMoveInterval -= moveIntervalDecrement;
+            currentMoveInterval = Mathf.Max(currentMoveInterval, minMoveInterval);
+            CancelInvoke("MoveRandomRowOrColumn");
+            InvokeRepeating("MoveRandomRowOrColumn", currentMoveInterval, currentMoveInterval);
+        }
 
+        // Decrease the disappear interval but ensure it doesn't go below the minimum
+        if (currentDisappearInterval > minDisappearInterval)
+        {
+            currentDisappearInterval -= disappearIntervalDecrement;
+            currentDisappearInterval = Mathf.Max(currentDisappearInterval, minDisappearInterval);
+            CancelInvoke("MakeCubeDisappear");
+            InvokeRepeating("MakeCubeDisappear", currentDisappearInterval, currentDisappearInterval);
+        }
+
+        // Decrease the warning duration but ensure it doesn't go below the minimum
+        if (currentWarningDuration > minWarningDuration)
+        {
+            currentWarningDuration -= warningDurationDecrement;
+            currentWarningDuration = Mathf.Max(currentWarningDuration, minWarningDuration);
+        }
+
+        Debug.Log("Current Move Interval: " + currentMoveInterval);
+        Debug.Log("Current Disappear Interval: " + currentDisappearInterval);
+        Debug.Log("Current Warning Duration: " + currentWarningDuration);
+    }
 
 }

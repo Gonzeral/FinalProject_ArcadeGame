@@ -15,18 +15,56 @@ public class Scoring : MonoBehaviour
     private float passedTime = 0f;
     private GameOverManager gameOverManager;
 
+    // Immunity variables
+    public GameObject ufoObject; // Reference to the player UFO object
+    public float immunityDuration = 3.0f; // Duration of the immunity period in seconds
+    public Color immunityColor = Color.yellow; // Color to indicate immunity
+    private bool isImmune = false;
+    private float immunityStart = 0f;
+    private Color originalColor;
+    private Renderer ufoRenderer;
+
     void Start()
     {
         gameOverManager = FindObjectOfType<GameOverManager>();
         UpdateScoreText();
         StartCoroutine(TimePenalty());
         UpdateLives();
+
+        // Get UFO renderer component in children
+        ufoRenderer = ufoObject.GetComponentInChildren<Renderer>();
+        if(ufoRenderer != null)
+        {
+            // Store color before immunity color gets involved
+            originalColor = ufoRenderer.material.color;
+        }
+        else
+        {
+            Debug.LogWarning("No renderer found on UFO");
+        }
+        
     }
 
     void Update()
     {
         passedTime += Time.deltaTime;
         UpdateScoreText();
+
+        // Check when immunity ends and set it back to false
+        if(isImmune)
+        {
+            immunityStart -= Time.deltaTime;
+            if(immunityStart <= 0f)
+            {
+                isImmune = false;
+                // Reset color back to normal after immunity
+                if(ufoRenderer != null)
+                {
+                    ufoRenderer.material.color = originalColor;
+                }
+            }
+
+        }
     }
 
     public void AddPoints(int points)
@@ -47,13 +85,28 @@ public class Scoring : MonoBehaviour
 
     public void LoseLife()
     {
-        lives -= 1;
-        UpdateLives();
-        if (lives <= 0)
+        if(!isImmune)
         {
-            CheckHighScore();
-            gameOverManager.GameOver();
+            lives -= 1;
+            UpdateLives();
+            if (lives <= 0)
+            {
+                CheckHighScore();
+                gameOverManager.GameOver();
+            } 
+
+            // Start immunity
+            isImmune = true;
+            immunityStart = immunityDuration;
+
+            // Activate immunity color
+            if(ufoRenderer != null)
+            {
+                ufoRenderer.material.color = immunityColor;
+            }
+            
         }
+        
     }
 
     private void UpdateLives()
