@@ -13,17 +13,35 @@ public class PlayerMovement : MonoBehaviour
     private Scoring scoreManager; // Reference scoring script
     private bool planetBelow = false; // Flag for live deduction
 
+    public AudioClip loseLifeSound;
+    public AudioClip moveSound;
+    private AudioSource audioSource;
+
+    private GameOverManager gameOverManager;
+
     void Start()
     {
         gridControl = FindObjectOfType<GridControl>();
         SetInitialPosition();
         matChanger = FindObjectOfType<DestroyPlanet>();
         scoreManager = FindObjectOfType<Scoring>();
+
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        gameOverManager = FindObjectOfType<GameOverManager>();
     }
 
 
     void Update()
     {
+        if(gameOverManager.IsGameOver)
+        {
+            return;
+        }
         if(Input.GetKeyDown(KeyCode.UpArrow)) 
         {
             JumpTo(currentPosition.x, currentPosition.y - 1);
@@ -56,11 +74,25 @@ public class PlayerMovement : MonoBehaviour
             matChanger.ChangePlanetMaterial(gridControl.grid[x, y]);
 
             planetBelow = false;
+
+            if(moveSound != null)
+            {
+                audioSource.PlayOneShot(moveSound);
+            }
             
         }
         else
         {
-            Debug.Log("Player outside of boundary");
+            //Debug.Log("Player outside of boundary");
+            currentPosition = new Vector2Int(3,3);
+            Vector3 targetPosition = new Vector3(currentPosition.x * 1.5f, ufoHeight, currentPosition.y * 1.5f);
+            transform.position = targetPosition;
+
+            scoreManager.LoseLife();
+            if(loseLifeSound != null)
+            {
+                audioSource.PlayOneShot(loseLifeSound);
+            }
         }
     }
 
@@ -84,6 +116,10 @@ public class PlayerMovement : MonoBehaviour
                 planetBelow = true;
                 // Deduct life
                 scoreManager.LoseLife();
+                if(loseLifeSound != null)
+                {
+                    audioSource.PlayOneShot(loseLifeSound);
+                }
             }
 
         }

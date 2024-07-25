@@ -1963,6 +1963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   points: 0
   manager: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
 --- !u!1 &712763581223368524
 GameObject:
   m_ObjectHideFlags: 0

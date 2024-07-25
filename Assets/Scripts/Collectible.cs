@@ -7,6 +7,18 @@ public class Collectible : MonoBehaviour
     public int points;
     public CollectibleManager manager;
 
+    public AudioClip collectSound;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = FindObjectOfType<AudioSource>();
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -17,6 +29,12 @@ public class Collectible : MonoBehaviour
                 scoreManager.AddPoints(points);
             }
             manager.usedPositions.Remove(new Vector2Int(Mathf.RoundToInt(transform.position.x / 1.5f), Mathf.RoundToInt(transform.position.z / 1.5f)));
+
+            if(collectSound != null)
+            {
+                audioSource.PlayOneShot(collectSound);
+            }
+
             Destroy(gameObject);
         }
     }

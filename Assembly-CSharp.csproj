@@ -67,10 +67,10 @@
     <Compile Include="Assets\Scripts\StartQuitGame.cs" />
     <Compile Include="Assets\Scripts\HighScoreManager.cs" />
     <Compile Include="Assets\Scripts\GameOverManager.cs" />
-    <Compile Include="Assets\Scripts\Collectibles.cs" />
     <Compile Include="Assets\Scripts\CollectibleManager.cs" />
     <Compile Include="Assets\Scripts\GridControl.cs" />
     <Compile Include="Assets\Scripts\DestroyPlanet.cs" />
+    <Compile Include="Assets\Scripts\Collectible.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
   </ItemGroup>
   <ItemGroup>

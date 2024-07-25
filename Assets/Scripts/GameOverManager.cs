@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameOverManager : MonoBehaviour
 {
     public GameObject gameOverScreen;
+    public bool IsGameOver = false;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +17,7 @@ public class GameOverManager : MonoBehaviour
 
     public void GameOver()
     {
+        IsGameOver = true;
         gameOverScreen.SetActive(true);
         Time.timeScale = 0f;
         EnableGameOverButtons();
@@ -23,12 +25,14 @@ public class GameOverManager : MonoBehaviour
 
     public void RestartGame()
     {
+        IsGameOver = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(1);
     }
 
     public void ReturnToMainMenu()
     {
+        IsGameOver = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
