@@ -9,11 +9,11 @@ public class GridControl : MonoBehaviour
     public GameObject[,] grid = new GameObject[6, 6]; // Grid structure = 6x6 grid
 
     // Following variables in seconds
-    public float moveInterval = 2.0f; // When to repeat grid movement
+    public float moveInterval = 2.5f; // When to repeat grid movement
     public float animationDuration = 0.5f; // Duration of the animation 
     public float disappearInterval = 5.0f; // When to repeat disappearing cubes
     public float invisibilityDuration = 5.0f; // Duration of the cube being invisible when disappearing
-    public float warningDuration = 3f; // Duration of the warning before cube disappears
+    public float warningDuration = 2f; // Duration of the warning before cube disappears
     public Material warningMaterial; // Material to warn player about disappearing cube
     public Material undestroyedPlanetMat; // Material of undestroyed planets
     private GameObject currentWarning; // Used for the arrow object instantiated for the row / column movement warning
