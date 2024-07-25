@@ -106,7 +106,11 @@ public class Scoring : MonoBehaviour
             }
             
         }
-        
+    }
+
+    public bool IsImmune()
+    {
+        return isImmune;
     }
 
     private void UpdateLives()
