@@ -222,11 +222,38 @@ public class GridControl : MonoBehaviour
         // Wait for the warning to be over and then deactivate cube 
         yield return new WaitForSeconds(warningDuration);
         cube.SetActive(false);
+
+        // Change surrounding cubes to undestroyed material
+        ChangeSurroundingCubesMaterial(rowIndex, colIndex, undestroyedPlanetMat);
+
         // Wait before cube is reactivated and make planet undestroyed again
         yield return new WaitForSeconds(invisibilityDuration); 
         renderer.material = undestroyedPlanetMat;
         cube.SetActive(true);
         
     }
+
+    void ChangeSurroundingCubesMaterial(int rowIndex, int colIndex, Material material)
+    {
+        // Define the eight possible directions including diagonals
+        int[] dx = {-1, 1, 0, 0, -1, -1, 1, 1}; // directions for row: left, right, up, down, and diagonals
+        int[] dy = {0, 0, -1, 1, -1, 1, -1, 1}; // directions for col: left, right, up, down, and diagonals
+        
+        for (int i = 0; i < 8; i++)
+        {
+            int newRow = rowIndex + dx[i];
+            int newCol = colIndex + dy[i];
+            
+            // Ensure the new indices are within the grid bounds
+            if (newRow >= 0 && newRow < 6 && newCol >= 0 && newCol < 6)
+            {
+                GameObject surroundingCube = grid[newRow, newCol];
+                Renderer adjRenderer = surroundingCube.GetComponent<Renderer>();
+                adjRenderer.material = material;
+            }
+        }
+    }
+
+
 
 }
