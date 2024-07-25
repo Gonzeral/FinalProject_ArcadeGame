@@ -88,10 +88,13 @@ public class PlayerMovement : MonoBehaviour
             Vector3 targetPosition = new Vector3(currentPosition.x * 1.5f, ufoHeight, currentPosition.y * 1.5f);
             transform.position = targetPosition;
 
-            scoreManager.LoseLife();
-            if(loseLifeSound != null)
+            if(!scoreManager.IsImmune())
             {
-                audioSource.PlayOneShot(loseLifeSound);
+                scoreManager.LoseLife();
+                if(loseLifeSound != null)
+                {
+                    audioSource.PlayOneShot(loseLifeSound);
+                }
             }
         }
     }
@@ -115,10 +118,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 planetBelow = true;
                 // Deduct life
-                scoreManager.LoseLife();
-                if(loseLifeSound != null)
+                if(!scoreManager.IsImmune())
                 {
-                    audioSource.PlayOneShot(loseLifeSound);
+                    scoreManager.LoseLife();
+                    if(loseLifeSound != null)
+                    {
+                        audioSource.PlayOneShot(loseLifeSound);
+                    }
                 }
             }
 
