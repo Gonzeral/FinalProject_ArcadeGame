@@ -25,7 +25,7 @@ public class GameOverManager : MonoBehaviour
         if(endScoreText != null)
         {
             // Display score at end of the game
-            endScoreText.text = "Your Score: " + endScore.ToString();
+            endScoreText.text = "Score: " + endScore.ToString();
         }
 
         EnableGameOverButtons();
