@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameOverManager : MonoBehaviour
 {
     public GameObject gameOverScreen;
+    public Text endScoreText;
     public bool IsGameOver = false;
 
     // Start is called before the first frame update
@@ -15,11 +16,18 @@ public class GameOverManager : MonoBehaviour
         gameOverScreen.SetActive(false);
     }
 
-    public void GameOver()
+    public void GameOver(int endScore)
     {
         IsGameOver = true;
         gameOverScreen.SetActive(true);
         Time.timeScale = 0f;
+
+        if(endScoreText != null)
+        {
+            // Display score at end of the game
+            endScoreText.text = "Your Score: " + endScore.ToString();
+        }
+
         EnableGameOverButtons();
     }
 
