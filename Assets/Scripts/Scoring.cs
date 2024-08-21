@@ -92,7 +92,7 @@ public class Scoring : MonoBehaviour
             if (lives <= 0)
             {
                 CheckHighScore();
-                gameOverManager.GameOver();
+                gameOverManager.GameOver(score);
             } 
 
             // Start immunity
