@@ -42,19 +42,19 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        if(Input.GetKeyDown(KeyCode.UpArrow)) 
+        if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) 
         {
             JumpTo(currentPosition.x, currentPosition.y - 1);
         }
-        if(Input.GetKeyDown(KeyCode.DownArrow)) 
+        if(Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) 
         {
             JumpTo(currentPosition.x, currentPosition.y + 1);
         }
-        if(Input.GetKeyDown(KeyCode.LeftArrow)) 
+        if(Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) 
         {
             JumpTo(currentPosition.x + 1, currentPosition.y);
         }
-        if(Input.GetKeyDown(KeyCode.RightArrow)) 
+        if(Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) 
         {
             JumpTo(currentPosition.x - 1, currentPosition.y);
         }
