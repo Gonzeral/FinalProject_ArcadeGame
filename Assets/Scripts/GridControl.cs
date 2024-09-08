@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class GridControl : MonoBehaviour
 {
+    // Cube prefab for planets
     public GameObject GridCube;
+    // Arrow prefab for warning of grid movements
     public GameObject WarningPrefab;
-    public GameObject[,] grid = new GameObject[6, 6]; // Grid structure = 6x6 grid
+    // Grid structure = 6x6 grid
+    public GameObject[,] grid = new GameObject[6, 6]; 
 
     // Following variables in seconds
     public float moveInterval = 2.5f; // When to repeat grid movement
@@ -28,17 +31,19 @@ public class GridControl : MonoBehaviour
     public float minDisappearInterval = 1.5f; // Minimum interval for disappearing cubes
     public float minWarningDuration = 0.5f; // Minimum duration for warnings
 
+    // Variables to track timings
     private float currentMoveInterval;
     private float currentDisappearInterval;
     private float currentWarningDuration;
 
     void Start()
     {
+        // Initialize default values for timing trackers
         currentMoveInterval = moveInterval;
         currentDisappearInterval = disappearInterval;
         currentWarningDuration = warningDuration;
 
-
+        // Nested loop to create grid
         for (int x = 0; x < 6; x++)
         {
             for (int y = 0; y < 6; y++)
@@ -61,6 +66,7 @@ public class GridControl : MonoBehaviour
 
     }
 
+    // Method to choose random column or row in grid
     void MoveRandomRowOrColumn()
     {
         // Clean up warning signal before starting new row / col movement
@@ -69,7 +75,7 @@ public class GridControl : MonoBehaviour
             Destroy(currentWarning);
         }
 
-        // 50 % chance to move either a row or a column with a random integer
+        // 50 % chance to move either a row or a column and direction up or down
         bool moveRow = Random.value > 0.5f;
         bool upOrDown = Random.value > 0.5f;
         int index = Random.Range(0, 6);
@@ -77,6 +83,7 @@ public class GridControl : MonoBehaviour
         Vector3 warningPosition;
         Quaternion warningRotation;
 
+        // Set position and rotation for warning arrow
         if(moveRow)
         {
             if (upOrDown)
@@ -104,18 +111,23 @@ public class GridControl : MonoBehaviour
             }
         }
 
+        // Instantiate warning arrow at defined position
         currentWarning = Instantiate(WarningPrefab, warningPosition, warningRotation);
+        // Start coroutine to move row or column after warning duration
         StartCoroutine(WarnGridMovement(moveRow, index, upOrDown));
 
+        // Coroutine handling warning before movement of grid
         IEnumerator WarnGridMovement(bool moveRow, int index, bool upOrDown)
         {
             yield return new WaitForSeconds(currentWarningDuration);
 
+            // Remove warning arrow
             if(currentWarning != null)
             {
                 Destroy(currentWarning);
             }
 
+            // Move selected row or column after warning duration
             if (moveRow)
             {
                 StartCoroutine(MoveRow(index, upOrDown));
@@ -127,6 +139,7 @@ public class GridControl : MonoBehaviour
         }
     }
 
+    // Coroutine handling moving of a row in the grid
     IEnumerator MoveRow(int rowIndex, bool upOrDown)
     {
         if (upOrDown)
@@ -207,7 +220,7 @@ public class GridControl : MonoBehaviour
         }
     }
 
-    //Animation used for grid movement / Takes the cube object and the new position as input
+    // Animation coroutine used for grid movement / Takes the cube object and the new position as input
     IEnumerator AnimateMovement(GameObject cube, Vector3 targetPosition)
     {
         // Get current position of cube and set start time
@@ -226,14 +239,15 @@ public class GridControl : MonoBehaviour
         cube.transform.position = targetPosition;
     }
 
+    // Choose a random cube in the grid and start coroutine to make cube disappear
     void MakeCubeDisappear()
     {
-        // Choose a random cube in the grid and use coroutine to call method to make cube disappear
         int rowIndex = Random.Range(0, 6);
         int colIndex = Random.Range(0, 6);
         StartCoroutine(DisappearReappearCube(rowIndex, colIndex));
     }
 
+    // Coroutine making cubes disappear and reappear
     IEnumerator DisappearReappearCube(int rowIndex, int colIndex)
     {
         // Save the current material of the random cube and warn player by changing material
@@ -254,12 +268,14 @@ public class GridControl : MonoBehaviour
         
     }
 
+    // Method changing material of surrounding cubes
     void ChangeSurroundingCubesMaterial(int rowIndex, int colIndex, Material material)
     {
         // Define the eight possible directions including diagonals
         int[] dx = {-1, 1, 0, 0, -1, -1, 1, 1}; // directions for row: left, right, up, down, and diagonals
         int[] dy = {0, 0, -1, 1, -1, 1, -1, 1}; // directions for col: left, right, up, down, and diagonals
         
+        // Change material of adjacent cubes
         for (int i = 0; i < 8; i++)
         {
             int newRow = rowIndex + dx[i];
@@ -275,7 +291,8 @@ public class GridControl : MonoBehaviour
         }
     }
 
-        void IncreaseDifficulty()
+    // Increases game difficulty by adjusting intervals
+    void IncreaseDifficulty()
     {
         // Decrease the move interval but ensure it doesn't go below the minimum
         if (currentMoveInterval > minMoveInterval)
@@ -302,6 +319,7 @@ public class GridControl : MonoBehaviour
             currentWarningDuration = Mathf.Max(currentWarningDuration, minWarningDuration);
         }
 
+        // Log updated values for debugging
         Debug.Log("Current Move Interval: " + currentMoveInterval);
         Debug.Log("Current Disappear Interval: " + currentDisappearInterval);
         Debug.Log("Current Warning Duration: " + currentWarningDuration);
